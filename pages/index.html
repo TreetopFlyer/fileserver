@@ -7,8 +7,47 @@
 		<script src="/js/jquery/dist/jquery.min.js"></script>
 		<script src="/js/angular/angular.min.js"></script>
 	</head>
-	<body>
-		<h1>Fileserver</h1>
-		<h2>Guess it works</h2>
+	<body ng-controller="Controller">
+		<h1 data-ng-custom-directive></h1>
 	</body>
+<script>
+var Site = angular.module("Site", []);
+Site.directive("ngCustomDirective", [function()
+{
+	return {
+		link:function(inScope, inElement, inAttributes)
+		{
+			console.log("element found");
+			$(inElement).html("hey");
+		}
+	}
+}]);
+Site.service("Custom", [function()
+{
+	return function(inArg)
+	{
+		return inArg;
+	};
+}]);
+Site.controller("Controller", ["$scope", "Custom", function(inScope, inCustom)
+{
+	console.log(inCustom("DEFAULT CONTROLLER"));
+}]);
+
+Site.controller("OtherController", ["$scope", "Custom", function(inScope, inCustom)
+{
+	inScope.Members = [];
+	inScope.Members.push(inCustom("test"));
+	
+	console.log("OTHER CONTROLLER", inScope);
+}]);
+
+angular.bootstrap(document, ["Site"]);
+
+
+
+
+
+</script>
+	
 </html>
